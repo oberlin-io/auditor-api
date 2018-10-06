@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Auditor-MISMO API</title>
+    <meta name='description' content='Auditor API from OBERL.INFO'/>
+    <meta charset="utf-8"/>
+	<script src='web-inf\lib\jquery-3.3.1.js'></script>
+	<!--meta http-equiv="refresh" content="10"-->
+    <style>
+		.wrapper {
+			font-family: sans-serif;
+			margin: auto;
+			max-width: 820px;
+			padding: 0px 6px 0px 6px;
+		}
+		p {
+			text-align: justify;
+		}
+		pre {
+			background-color: #DEEBF7;
+			font-family: monospace;
+			font-size: 1em;
+		}
+		table {
+			border-collapse: collapse;
+			width: 100%;
+		}
+		td, th {
+			text-align: left;
+			padding: 6px;
+			border: 1px solid grey;
+			background-color: #DEEBF7;
+			font-family: monospace;
+			font-size: 1em;
+		}
+		.output {
+		}
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+    <h1>Stark County Data and MISMO Schema</h1>
+	<p>2018-06-21 | Beta | <a href='http://oberl.info'>oberl.info</a></p>
+	
+	
+	<h2>County API Call Results within MISMO Structure</h2>
+
+	<button onclick='callAPI()'>Search an Address</button>
+	
+	<div class='output' id='output'></div>
+	
+	
+	<h2>Add: MISMO XML output</h2>
+	
+	
+	<h2>About</h2>
+	
+	<p>The Mortgage Industry Standards Maintenance Organization (MISMO) provides an XML data structure as a common language to exchange data across the mortgage finance industry. The Appraise-It program, to which our ultimate output is, happens to have a MISMO XML import function.</p>
+
+	<p>The county auditor makes available data, which we need inputted into Appraise-It, via RESTful API. The API outputs a JSON data structure. Because the county data structure and the mortgage industry's XML are different, I've mapped their fields one-to-one.</p>
+
+	<p>Both XML and JSON can be thought of as data dictionaries with key-value pairs, conceptually: key=value, eg parcel=1234567 or owner='John Oberlin'. An XML structure is constructed of elements, within which optional attributes are embedded. Attributes are like keys, as they have values. A JSON structure can be thought of as sets of keys and values.</p>
+
+	<p>So, in the MISMO XML, a parcel with number 1234567 looks like:</p>
+	<pre>&lt;PARCEL_IDENTIFIER GSEAssessorsParcelIdentifier="1234567" /&gt;</pre>
+
+	<p>And in the county ParcelData API ouput in JSON:
+	<pre>"PARCEL_NUMBER": "1234567"</pre>
+
+	<p>My mapping dictionary structure (happens to be in JSON as well, because it looks cleaner than XML):
+	<pre>"API": {
+	"MISMO_XML_ELEMENT": {
+		"MISMO_ElementAttribute": "API_FIELD"
+	}
+}</pre>
+
+	<p>That is to say that, the API_FIELD maps directly to the MISMO_ElementAttribute, whose parent is a MISMO_XML_ELEMENT. (This retains the element-attribute relationship from the XML.) All of which are under a related API.</p>
+
+	<p>Here's a slice from the schema concerning parcel number:</p>
+	<pre>"ParcelData" {
+	"PARCEL_IDENTIFIER": {
+		"GSEAssessorsParcelIdentifier": "PARCEL_NUMBER"
+	}
+}</pre>
+
+	<p>So now when, retrieving API data and hoping to output it as MISMO formatted XML, we can programmatially say, 'We're getting PARCEL_NUMBER from the API, so its value should now be the value for GSEAssessorsParcelIdentifier within PARCEL_IDENTIFIER.'</p>
+
+	<h2>Links</h2>
+		<ul>
+			<li><a href='mismo_map.json' target='_blank'>API-MISMO Mapping</a> (JSON)</li>
+			<li><a href='http://www.mismo.org/get-started/adopt-the-standards' target='_blank'>MISMO Standards</a></li>
+			<li><a href='http://opendata.starkcountyohio.gov' target='_blank'>Stark County Open Data</a></li>
+		</ul>
+		
+	<br>
+	<br>
+	<br>
+	<p>(c) John Oberlin, 2018</p>
+
+</div>
+
+<script type="text/javascript" language="javascript">
+
+//var content = 'Testing the jquery output id tag.'
+//$('#output').html(content);
+
+
+// Do stuff to the response JSON
+function scrub(resp) {
+	
+	// Check Inspect > Console to see response
+	console.log(resp);
+				
+	//var cont = 'Hello';
+	
+	
+	var cont = '<p>PacelData API results for ' + resp.features[0].attributes.SITUS_ADDRESS + '.</p>'
+	+ '<table><tr><th>MISMO Element</th><th>MISMO Attribute</th><th>API Key</th><th>API Value</th></tr>';
+	
+	
+	// Iterate over MISMO json map, iterate the API fields (value leafs)
+	// Run the following block as function, taking API field and respective MISMO attribute and element
+	
+	parcel = resp.features[0].attributes.PARCEL_NUMBER;
+	
+	cont += '<tr><td>' + 'PARCEL_IDENTIFIER' + '</td>'
+	+ '<td>' + 'GSEAssessorsParcelIdentifier' + '</td>'
+	+ '<td>' + 'PARCEL_NUMBER' + '</td>'
+	+ '<td>' + parcel + '</td></tr>'
+	
+	
+	LEGAL_DESCRIPTION = resp.features[0].attributes.LEGAL_DESCRIPTION;
+	
+	cont += '<tr><td>' + '_LEGAL_DESCRIPTION' + '</td>'
+	+ '<td>' + '_TextDescription' + '</td>'
+	+ '<td>' + 'LEGAL_DESCRIPTION' + '</td>'
+	+ '<td>' + LEGAL_DESCRIPTION + '</td></tr>'
+	
+	TAX_DISTRICT = resp.features[0].attributes.TAX_DISTRICT;
+	
+	cont += '<tr><td>' + '_LEGAL_DESCRIPTION' + '</td>'
+	+ '<td>' + '_TextDescription' + '</td>'
+	+ '<td>' + 'TAX_DISTRICT' + '</td>'
+	+ '<td>' + TAX_DISTRICT + '</td></tr>'
+	
+	STATE_SCHOOL_ID = resp.features[0].attributes.STATE_SCHOOL_ID;
+	
+	cont += '<tr><td>' + 'NEIGHBORHOOD' + '</td>'
+	+ '<td>' + '_Name' + '</td>'
+	+ '<td>' + 'STATE_SCHOOL_ID' + '</td>'
+	+ '<td>' + STATE_SCHOOL_ID + '</td></tr>'
+	
+	
+	cont += '</table>'
+	
+	
+	console.log(cont);
+	
+	// Append to features id in HTML. Also see .append()
+	$('#output').html(cont);
+};
+
+
+
+// User input address, concat URL string
+function addressPlease() {
+	var add_num = prompt("Enter address number: ", "435");
+	var street = prompt("Enter street: ", "16");
+	//var add_num = "435";
+	//var street = "16";
+	
+	//var url_ = "https://scgisa.starkcountyohio.gov/arcgis/rest/services/Auditor/ParcelData/MapServer/0/query?where=UPPER(SITUS_ADDRESS)%20like%20'%25435%2016TH%25'&outFields=*&outSR=4326&f=json";
+	url_ =
+	"https://scgisa.starkcountyohio.gov/arcgis/rest/services/Auditor/ParcelData/MapServer/0/query?where=UPPER(SITUS_ADDRESS)%20like%20'%25"
+	+ add_num
+	+"%20"
+	+ street
+	+"%25'&outFields=*&outSR=4326&f=json";
+	
+	return url_
+}
+
+
+function callAPI() {
+
+	$(document).ready(
+
+	function() {
+	
+		var url_ = addressPlease();
+
+		$.ajax({
+		
+			type: 'GET',
+			cache: false,
+			timeout: 10000,
+			
+			//url: "https://scgisa.starkcountyohio.gov/arcgis/rest/services/Auditor/ParcelData/MapServer/0/query?where=UPPER(SITUS_ADDRESS)%20like%20'%25435%2016TH%25'&outFields=*&outSR=4326&f=json",
+			url: url_,
+			
+			// Evaluates the response as JSON and returns a JavaScript object.
+			dataType: 'json',
+					
+			success: function(resp) {
+				scrub(resp)
+			}
+			
+		});
+    
+	}
+);
+}
+
+</script>
+</body>
+</html>

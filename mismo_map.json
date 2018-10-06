@@ -1,0 +1,44 @@
+{
+	"mismoXML_auditorJSON": {
+		
+		"meta": {
+			"auditor_api_field": "<mismo_xml_element>[var]</mismo_xml_element>",
+			"MISMOVersionID": "2.6GSE",
+			"map_schema": {
+				"API": {
+					"MISMO_XML_ELEMENT": {
+						"ElementAttribute": "AUDITOR_FIELD"
+					}
+				}
+			},
+			"comments": "Is aud TAX_DISTRICT's city always the same as the location's address city?"
+		},
+		
+		"ParcelData" {
+			"PARCEL_IDENTIFIER": {
+				"GSEAssessorsParcelIdentifier": "PARCEL_NUMBER"
+			},
+			
+			"PROPERTY": {
+				"_StreetAddress": "SITUS_ADDRESS",
+				"_City": "TAX_DISTRICT"
+			},
+			
+			"_LEGAL_DESCRIPTION": {
+				"_TextDescription": [
+					"LEGAL_DESCRIPTION",
+					"TAX_DISTRICT"
+				]
+			},
+				
+			"PROPERTY_OWNER": {
+				"GSEPropertyOwnerName": "CURRENT_OWNER"
+			},
+			
+			"NEIGHBORHOOD": {
+				"_Name": "STATE_SCHOOL_ID"
+			}
+		},
+		"ParcelSales": null
+	}
+}
