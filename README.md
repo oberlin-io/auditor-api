@@ -45,7 +45,7 @@ Here's a slice from the schema concerning parcel number:
 So now when, retrieving API data and hoping to output it as MISMO formatted XML, we can programmatially say, 'We're getting PARCEL_NUMBER from the API, so its value should now be the value for GSEAssessorsParcelIdentifier within PARCEL_IDENTIFIER.'
 
 ## Links
- * [API-MISMO Mapping in JSON)]()
+ * [API-MISMO Mapping in JSON](https://github.com/oberljn/auditor-api/blob/master/mismo_map.json)
  * [MISMO Standards](http://www.mismo.org/get-started/adopt-the-standards)
  * [Stark County Open Data](http://opendata.starkcountyohio.gov)
 
