@@ -49,10 +49,6 @@
 	
 	<div class='output' id='output'></div>
 	
-	
-	<h2>Add: MISMO XML output</h2>
-	
-	
 	<h2>About</h2>
 	
 	<p>The Mortgage Industry Standards Maintenance Organization (MISMO) provides an XML data structure as a common language to exchange data across the mortgage finance industry. The Appraise-It program, to which our ultimate output is, happens to have a MISMO XML import function.</p>
@@ -164,12 +160,12 @@ function scrub(resp) {
 
 // User input address, concat URL string
 function addressPlease() {
-	var add_num = prompt("Enter address number: ", "435");
-	var street = prompt("Enter street: ", "16");
-	//var add_num = "435";
-	//var street = "16";
+	var add_num = prompt("Enter address number: ", "4500");
+	var street = prompt("Enter street: ", "Atlantic");
+	//var add_num = "4500";
+	//var street = "Atlantic";
 	
-	//var url_ = "https://scgisa.starkcountyohio.gov/arcgis/rest/services/Auditor/ParcelData/MapServer/0/query?where=UPPER(SITUS_ADDRESS)%20like%20'%25435%2016TH%25'&outFields=*&outSR=4326&f=json";
+	//var url_ = "https://scgisa.starkcountyohio.gov/arcgis/rest/services/Auditor/ParcelData/MapServer/0/query?where=UPPER(SITUS_ADDRESS)%20like%20'%254500%20AtlanticTH%25'&outFields=*&outSR=4326&f=json";
 	url_ =
 	"https://scgisa.starkcountyohio.gov/arcgis/rest/services/Auditor/ParcelData/MapServer/0/query?where=UPPER(SITUS_ADDRESS)%20like%20'%25"
 	+ add_num
@@ -195,7 +191,7 @@ function callAPI() {
 			cache: false,
 			timeout: 10000,
 			
-			//url: "https://scgisa.starkcountyohio.gov/arcgis/rest/services/Auditor/ParcelData/MapServer/0/query?where=UPPER(SITUS_ADDRESS)%20like%20'%25435%2016TH%25'&outFields=*&outSR=4326&f=json",
+			//url: "https://scgisa.starkcountyohio.gov/arcgis/rest/services/Auditor/ParcelData/MapServer/0/query?where=UPPER(SITUS_ADDRESS)%20like%20'%254500%20AtlanticTH%25'&outFields=*&outSR=4326&f=json",
 			url: url_,
 			
 			// Evaluates the response as JSON and returns a JavaScript object.
