@@ -1,5 +1,5 @@
-# auditor-api
-Queries a county REST API, parses JSON response, and concatenates HTML strings with JavaScript jQuery
+# Auditor API
+Queries a county REST API, parses JSON response, and applies an auditor-MISMO JSON map to label the data.
 
 ## About
 The Mortgage Industry Standards Maintenance Organization (MISMO) provides an XML data structure as a common language to exchange data across the mortgage finance industry. The Appraise-It program, to which our ultimate output is, happens to have a MISMO XML import function.
